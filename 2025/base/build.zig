@@ -62,21 +62,21 @@ pub fn build(b: *std.Build) void {
     // Setup exe executable
     {
         exe.addCSourceFiles(exe_files);
-        exe.addIncludePath(b.path("include"));
+        exe.root_module.addIncludePath(b.path("include"));
     }
 
     // Setup debug executable
     {
         var debug_files = exe_files;
         debug_files.flags = additional_flags;
-        debug.addCSourceFiles(debug_files);
-        debug.addIncludePath(b.path("include"));
+        debug.root_module.addCSourceFiles(debug_files);
+        debug.root_module.addIncludePath(b.path("include"));
     }
 
     // Build and/or Link Static library --------------------------------------
     const aoc_lib = createCLib(b, .{
         .name = "aoc",
-        .dir_path = "lib/advent_of_code/",
+        .dir_path = "lib/",
         .optimize = optimize,
         .target = target,
         .language = .cpp,
@@ -111,6 +111,7 @@ pub fn build(b: *std.Build) void {
 
     targets.append(b.allocator, exe) catch |err| @panic(@errorName(err));
     targets.append(b.allocator, debug) catch |err| @panic(@errorName(err));
+    targets.append(b.allocator, aoc_lib) catch |err| @panic(@errorName(err));
 
     // Used to generate compile_commands.json
     _ = zcc.createStep(
@@ -195,7 +196,7 @@ fn getClangPath(alloc: std.mem.Allocator, target: std.Target) ![]const u8 {
 }
 
 const runtime_check_flags: []const []const u8 = &.{
-    "-fsanitize=array-bounds,null,alignment,unreachable,address,leak", // asan and leak are linux/macos only in 0.14.1
+    "-fsanitize=array-bounds,null,alignment,unreachable", //address,leak", // asan and leak are linux/macos only in 0.14.1
     "-fstack-protector-strong",
     "-fno-omit-frame-pointer",
 };
@@ -235,11 +236,13 @@ fn getBuildFlags(
         if (exe.rootModuleTarget().os.tag == .windows)
             return cpp_flags;
 
-        exe.addLibraryPath(.{ .cwd_relative = try getClangPath(alloc, exe.rootModuleTarget()) });
-        const asan_lib = if (exe.rootModuleTarget().os.tag == .windows) "clang_rt.asan_dynamic-x86_64" // Won't be triggered in current version
-            else "clang_rt.asan-x86_64";
+        _ = alloc;
 
-        exe.linkSystemLibrary(asan_lib);
+        // exe.addLibraryPath(.{ .cwd_relative = try getClangPath(alloc, exe.rootModuleTarget()) });
+        // const asan_lib = if (exe.rootModuleTarget().os.tag == .windows) "clang_rt.asan_dynamic-x86_64" // Won't be triggered in current version
+        // else "clang_rt.asan-x86_64";
+
+        // exe.linkSystemLibrary(asan_lib);
     } else {
         cpp_flags = additional_flags;
     }
@@ -280,7 +283,7 @@ fn createCLib(
             @panic(@errorName(err)),
     );
 
-    lib.addIncludePath(b.path(lib_options.include_path));
+    lib.root_module.addIncludePath(b.path(lib_options.include_path));
 
     return lib;
 }
