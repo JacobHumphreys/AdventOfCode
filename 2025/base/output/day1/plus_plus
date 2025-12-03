@@ -1,0 +1,8 @@
+HelloPosition: 50 | Direction 50
+	Sum: 100 -> Clicks 1
+	New Position: 0
+Position: 0 | Direction 50
+	Sum: 50 -> Clicks 0
+	New Position: 50
+Password: 1
+Password 2: 1

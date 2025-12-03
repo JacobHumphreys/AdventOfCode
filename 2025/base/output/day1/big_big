@@ -1,0 +1,19 @@
+Position: 50 | Direction -1050
+	Sum: -1000 -> Clicks: 11
+	New Position: 0
+Position: 0 | Direction 50
+	Sum: 50 -> 	New Position: 50
+Position: 50 | Direction 1050
+	Sum: 1100 -> Clicks: 11
+	New Position: 0
+Position: 0 | Direction 0
+	Sum: 0 -> Clicks: 0
+	New Position: 0
+Position: 0 | Direction -100
+	Sum: -100 -> Clicks: 1
+	New Position: 0
+Position: 0 | Direction 100
+	Sum: 100 -> Clicks: 1
+	New Position: 0
+Password: 5
+Password 2: 24
