@@ -52,12 +52,11 @@
             mkdir -p $ZIG_GLOBAL_CACHE_DIR/p/zig_compile_commands-0.0.1-OZg5-ULBAABTh3NXO3WXoSUX1474ez0EouuoT2yDANhz
             cp -r ${zigCompileCommands}/* $ZIG_GLOBAL_CACHE_DIR/p/zig_compile_commands-0.0.1-OZg5-ULBAABTh3NXO3WXoSUX1474ez0EouuoT2yDANhz/
             ls ./include/
-            exit 1
-            # zig build;
+            zig build;
         '';
 
         installPhase = ''
-            mkdir bin
+            mkdir -p $out/bin
             cp $PWD/zig-out/bin/aoc_2025 $out/bin/AdventOfCode
         '';
 
