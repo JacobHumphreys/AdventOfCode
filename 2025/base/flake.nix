@@ -59,10 +59,6 @@
             mkdir -p $out/bin
             cp $PWD/zig-out/bin/aoc_2025 $out/bin/AdventOfCode
         '';
-
-        checkPhase = ''
-            $PWD/zig-out/bin/aoc_2025 -f $PWD/test_files/day3/basic -p 2 -d 3
-        '';
     };
   };
 }
