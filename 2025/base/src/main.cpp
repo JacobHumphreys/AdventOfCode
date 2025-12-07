@@ -41,5 +41,7 @@ int main(int argc, char** argv) {
         return day2::run(filepath.value(), part.value());
     case 3:
         return day3::run(filepath.value(), part.value());
+    case 4:
+        return day4::run(filepath.value(), part.value());
     }
 }
