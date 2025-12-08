@@ -22,26 +22,24 @@ using std::ranges::views::transform;
 struct Range {
     int64_t lower, upper;
 
-    bool inRange(int64_t value) { return value < upper and value >= lower; }
-
-    bool inRangeInclusive(int64_t value) { return value <= upper and value >= lower; }
+    bool inRange(int64_t value) { return value <= upper and value >= lower; }
 
     string toString() { return std::format("{}-{}", lower, upper); }
 
     optional<Range> merge(Range other) {
         int64_t lower_merged, upper_merged;
 
-        if (inRangeInclusive(other.lower)) {
+        if (inRange(other.lower)) {
             lower_merged = this->lower;
-        } else if (other.inRangeInclusive(lower)) {
+        } else if (other.inRange(lower)) {
             lower_merged = other.lower;
         } else {
             return {};
         }
 
-        if (inRangeInclusive(other.upper)) { // this.upper >= other.upper
+        if (inRange(other.upper)) { // this.upper >= other.upper
             upper_merged = this->upper;
-        } else if (other.inRangeInclusive(upper)) { // other.upper >= this.upper
+        } else if (other.inRange(upper)) { // other.upper >= this.upper
             upper_merged = other.upper;
         } else { // lists cannot be merged
             return {};
@@ -121,24 +119,12 @@ vector<int64_t> parseValues(vector<string> lines) {
     return vector<int64_t>(v.begin(), v.end());
 };
 
-Range getFullRange(vector<Range> ranges) {
-    int64_t max = LONG_MIN;
-    int64_t min = LONG_MAX;
-
-    for (auto range : ranges) {
-        max = std::max(max, range.upper);
-        min = std::min(min, range.lower);
-    }
-
-    return { .lower = min, .upper = max };
-}
-
 uint64_t getValidValues(vector<Range> merged_ranges, vector<int64_t> values) {
     uint64_t valid_counter = 0;
 
     for (auto range : merged_ranges) {
         for (auto value : values) {
-            if (range.inRangeInclusive(value)) {
+            if (range.inRange(value)) {
                 valid_counter += 1;
             }
         }
