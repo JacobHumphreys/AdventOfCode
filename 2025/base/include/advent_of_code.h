@@ -18,3 +18,7 @@ int run(std::string filepath, int part);
 namespace day4 {
 int run(std::string filepath, int part);
 }
+
+namespace day5 {
+int run(std::string filepath, int part);
+}

@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef __cplusplus
+
 #include <cstdint>
 struct Vec2 {
     int32_t x, y;
@@ -25,6 +27,26 @@ struct Vec2 {
 
 namespace Vectors {
 
-Vec2 zero2 = Vec2(0, 0);
+const Vec2 zero2 = Vec2(0, 0);
 
 }
+
+
+#else
+
+#include "stdint.h"
+
+typedef struct {
+    int32_t x, y;
+} Vec2;
+
+
+Vec2 Vec2_add(Vec2 left, Vec2 right){
+    return (Vec2){left.x + right.x, left.y + right.y};
+}
+
+Vec2 Vec2_sub(Vec2 left, Vec2 right){
+    return (Vec2){left.x - right.x, left.y - right.y};
+}
+
+#endif // __cplusplus

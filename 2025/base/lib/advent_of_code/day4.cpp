@@ -1,7 +1,7 @@
 #include "advent_of_code.h"
 #include "files.h"
 #include "string"
-#include "jlib.hpp"
+#include "jlib.h"
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
